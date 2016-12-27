@@ -1,0 +1,128 @@
+import java.util.Random
+
+rule "init all items"
+when
+	System started
+then
+	slave1TempB303Soll.sendCommand(20.0)
+
+	slave1HeatingLevel.sendCommand(0)
+
+	slave1AirconLevel.sendCommand(0)
+
+	slave1WindowA.sendCommand(CLOSED)
+	slave1WindowA.postUpdate(CLOSED)
+
+	slave1WindowB.sendCommand(CLOSED)
+
+	slave1LightFront.sendCommand(OFF)
+
+	slave1LightBack.sendCommand(OFF)
+end
+
+rule "demo room temperature"
+when
+	Time cron "/3 * * * * ?"
+then
+	var diff = ((Math::random - 0.5) * 4.0).doubleValue
+	var temp = 20.0 + diff;
+	slave1TempB303Ist.sendCommand(temp)
+end
+
+rule "check room temp"
+when
+	Item slave1TempB303Ist changed or
+	Item slave1TempB303Soll changed or
+	Item slaveWindowA changed or
+	Item slaveWindowB changed or
+	Item preCalendar changed or
+	Item prePhysical changed
+then
+	var winA = slave1WindowA.state
+	var winB = slave1WindowB.state
+	var winOpen = 1
+	if (winA == CLOSED && winB == CLOSED) {
+		winOpen = 0
+	}
+
+	var preC = preCalendar.state
+	var preP = prePhysical.state
+	var presence = 1
+	if (preC == OFF && preP == OFF) {
+		presence = 0
+	}
+
+	var ist = (slave1TempB303Ist.state as DecimalType).doubleValue
+	var soll = (slave1TempB303Soll.state as DecimalType).doubleValue
+	var diff = soll-ist
+
+	if (winOpen == 0 && presence == 1 || ist <= 4.0) {
+		if (diff >= 6.0) {
+			slave1HeatingLevel.sendCommand(6)
+		} else if (diff >= 5.0) {
+			slave1HeatingLevel.sendCommand(5)
+		} else if (diff >= 4.0) {
+			slave1HeatingLevel.sendCommand(4)
+		} else if (diff >= 3.0) {
+			slave1HeatingLevel.sendCommand(3)
+		} else if (diff >= 2.0) {
+			slave1HeatingLevel.sendCommand(2)
+		} else if (diff >= 1.0) {
+			slave1HeatingLevel.sendCommand(1)
+		} else {
+			slave1HeatingLevel.sendCommand(0)
+		}
+	} else {
+		slave1HeatingLevel.sendCommand(0)
+	}
+
+	if (presence == 1) {
+		if (diff <= -4.0) {
+			slave1AirconLevel.sendCommand(2)
+		} else if (diff <= -2.0) {
+			slave1AirconLevel.sendCommand(1)
+		} else {
+			slave1AirconLevel.sendCommand(0)
+		}
+	} else {
+		slave1AirconLevel.sendCommand(0)
+	}
+end
+
+rule "check heating status"
+when
+	Item slave1HeatingLevel changed
+then
+	var double tmp=(slave1HeatingLevel.state as DecimalType).doubleValue
+	if (tmp == 0) {
+		slave1HeatingStatus.sendCommand(OFF)
+	}
+	else {
+		slave1HeatingStatus.sendCommand(ON)
+	}
+end
+
+rule "check aircon status"
+when
+	Item slave1AirconLevel changed
+then
+	var double tmp=(slave1AirconLevel.state as DecimalType).doubleValue
+	if (tmp == 0) {
+		slave1AirconStatus.sendCommand(OFF)
+	}
+	else {
+		slave1AirconStatus.sendCommand(ON)
+	}
+end
+
+rule "check window"
+when
+	Item slave1WindowA changed or
+	Item slave1WindowB changed
+then
+	var winA = slave1WindowA.state
+	var winB = slave1WindowB.state
+	if (winA == OPEN || winB == OPEN) {
+		slave1HeatingLevel.sendCommand(0)
+	}
+end

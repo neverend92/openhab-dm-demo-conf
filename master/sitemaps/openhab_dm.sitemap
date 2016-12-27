@@ -1,0 +1,37 @@
+sitemap openhab_dm label="OpenHAB-DM"
+{
+	Frame label="Räume" {
+		Text item=gB303 {
+			Frame label="Raumtemperatur" {
+				Text item=slave1TempB303Ist label="Temperatur IST [%.1f °C]" icon="temperature"
+				Setpoint item=slave1TempB303Soll label="Temperatur SOLL [%.1f °C]" icon="temperature" step=0.5 minValue=15 maxValue=25
+			}
+
+			Frame label="Heizung" {
+				Text item=slave1HeatingStatus icon="switch" label="Heizug Status [%s]"
+				Setpoint item=slave1HeatingLevel label="Heizung Stellung [%s]" icon="heating" step=1 minValue=0 maxValue=6
+			}
+
+			Frame label="Ventilator" {
+				Text item=slave1AirconStatus icon="switch" label="Ventilator Status [%s]"
+				Setpoint item=slave1AirconLevel label="Ventilator Stellung [%s]" icon="heating" step=1 minValue=0 maxValue=2
+			}
+
+			Frame label="Anwesenheit" {
+				Text item=preCalendar icon="calendar" label="Anwesenheit laut Kalender [%s]"
+				Switch item=prePhysical icon="calendar" label="Physische Anwesenheit [%s]"
+				Text item=OfficeCalName0
+			}
+
+			Frame label="Fenster" {
+				Text item=slave1WindowA label="Fenster rechts [%s]"
+				Text item=slave1WindowB label="Fenster links [%s]"
+			}
+
+			Frame label="Licht" {
+				Switch item=slave1LightFront label="Licht vorne" icon="light"
+				Switch item=slave1LightBack label="Licht hinten" icon="light"
+			}
+		}
+	}
+}

@@ -1,0 +1,1 @@
+[{"ip":"http://192.168.0.150:8080","description":"Node for Demonstration","name":"Demo-Node","credentials":"openhab:openhab","extensions":["binding-mqtt"]}]

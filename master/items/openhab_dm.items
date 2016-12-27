@@ -1,0 +1,24 @@
+Group		gUniTuebingen		"Universität Tübingen"	<house>
+Group 	gSand						"Gebäude Sand"					<house>				(gUniTuebingen)
+Group 	gKN							"Arbeitsbereich KN"			<firstfloor>	(gSand)
+
+Group 	gB303						"Raum B303"							<office>			(gKN)
+
+Number	slave1TempB303Ist	(gB303) {mqtt="<[mosquitto:/slave1/out/tempB303Ist/state:state:default], >[mosquitto:/slave1/in/tempB303Ist/command:command:*:default]"}
+Number	slave1TempB303Soll (gB303) {mqtt="<[mosquitto:/slave1/out/tempB303Soll/state:state:default], >[mosquitto:/slave1/in/tempB303Soll/command:command:*:default]"}
+
+Switch	slave1HeatingStatus (gB303) {mqtt="<[mosquitto:/slave1/out/heatingStatus/state:state:default], >[mosquitto:/slave1/in/heatingStatus/command:command:*:default]"}
+Number  slave1HeatingLevel (gB303) {mqtt="<[mosquitto:/slave1/out/heatingLevel/state:state:default], >[mosquitto:/slave1/in/heatingLevel/command:command:*:default]"}
+
+Switch	slave1AirconStatus (gB303) {mqtt="<[mosquitto:/slave1/out/airconStatus/state:state:default], >[mosquitto:/slave1/in/airconStatus/command:command:*:default]"}
+Number  slave1AirconLevel (gB303) {mqtt="<[mosquitto:/slave1/out/airconLevel/state:state:default], >[mosquitto:/slave1/in/airconLevel/command:command:*:default]"}
+
+Switch	preCalendar	(gB303) {caldavPersonal="calendar:horde type:PRESENCE"}
+String OfficeCalName0   "Termin jetzt [%s]"     <calendar>  { caldavPersonal="calendar:horde type:ACTIVE eventNr:1 value:NAME" }
+Switch	prePhysical	(gB303)
+
+Contact	slave1WindowA (gB303) {mqtt="<[mosquitto:/slave1/out/windowA/state:state:default], >[mosquitto:/slave1/in/windowA/command:command:*:default]"}
+Contact slave1WindowB (gB303) {mqtt="<[mosquitto:/slave1/out/windowB/state:state:default], >[mosquitto:/slave1/in/windowB/command:command:*:default]"}
+
+Switch slave1LightFront (gB303) {mqtt="<[mosquitto:/slave1/out/lightFront/state:state:default], >[mosquitto:/slave1/in/lightFront/command:command:*:default]"}
+Switch slave1LightBack (gB303) {mqtt="<[mosquitto:/slave1/out/lightBack/state:state:default], >[mosquitto:/slave1/in/lightBack/command:command:*:default]"}

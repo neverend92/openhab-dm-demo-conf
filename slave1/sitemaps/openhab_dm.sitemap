@@ -1,0 +1,9 @@
+sitemap openhab_dm label="OpenHAB-DM"
+{
+	Frame label="Test" {
+		Text item=windowA label="Fenster rechts [%s]" icon="window"
+		Text item=tempB303Ist label="Temperatur IST [%.1f °C]" icon="temperature"
+		Switch item=lightFront label="Licht vorne" icon="light"
+		Switch item=lightBack label="Licht hinten" icon="light"
+	}
+}

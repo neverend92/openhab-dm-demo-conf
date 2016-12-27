@@ -1,0 +1,17 @@
+Number tempB303Ist
+Number tempB303Soll
+
+Switch heatingStatus
+Number heatingLevel
+
+Switch airconStatus
+Number airconLevel
+
+Switch preCalendar
+Switch prePhysical
+
+Contact windowA "Fenster rechts [%s]" <window> {aleoncean="REMOTEID=01:97:F7:26,TYPE=RD_D5-00-01,PARAMETER=OPEN_CLOSED"}
+Contact windowB "Fenster links [%s]" <window> {aleoncean="REMOTEID=01:95:C9:A3,TYPE=RD_D5-00-01,PARAMETER=OPEN_CLOSED"}
+
+Switch lightFront
+Switch lightBack
